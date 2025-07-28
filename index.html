@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Documentos de Oferta de Licitación</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a5fb4;
+            --secondary: #2ec27e;
+            --dark: #1e1e1e;
+            --light: #f8f9fa;
+            --gray: #e0e0e0;
+            --danger: #e01b24;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), #0d47a1);
+            color: white;
+            padding: 25px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo-subtext {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .card-header i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 95, 180, 0.2);
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #0d47a1;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #26a269;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--gray);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(26, 95, 180, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .file-upload p {
+            margin: 10px 0;
+            color: #666;
+        }
+        
+        .file-name {
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .document-preview {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .document-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--gray);
+        }
+        
+        .document-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .document-content {
+            line-height: 1.8;
+        }
+        
+        .document-section {
+            margin-bottom: 30px;
+        }
+        
+        .document-section h3 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--gray);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .document-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .document-label {
+            font-weight: 600;
+            width: 200px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px 0;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--gray);
+            margin-top: 30px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .notification.success {
+            background: rgba(46, 194, 126, 0.2);
+            border: 1px solid var(--secondary);
+            color: #1f7a54;
+        }
+        
+        .notification.error {
+            background: rgba(224, 27, 36, 0.1);
+            border: 1px solid var(--danger);
+            color: #b31920;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-file-contract"></i>
+                    <div>
+                        <div class="logo-text">Generador de Ofertas</div>
+                        <div class="logo-subtext">Para procesos de licitación pública</div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn" onclick="downloadDocument()">
+                        <i class="fas fa-download"></i> Descargar Documento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="notification success" id="successNotification">
+            <i class="fas fa-check-circle"></i> ¡Documento generado con éxito! Revise la vista previa.
+        </div>
+        
+        <div class="notification error" id="errorNotification">
+            <i class="fas fa-exclamation-circle"></i> Por favor complete todos los campos requeridos.
+        </div>
+        
+        <main>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-edit"></i>
+                    <h2 class="card-title">Datos de la Licitación</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tenderNumber">Número de Licitación *</label>
+                    <input type="text" id="tenderNumber" placeholder="Ej: LPN-05-ARSA-2025">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tenderName">Nombre de la Licitación *</label>
+                    <input type="text" id="tenderName" placeholder="Ej: Adquisición de Licencias de Software">
+                </div>
+                
+                <div class="form-group">
+                    <label for="entityName">Entidad Contratante *</label>
+                    <input type="text" id="entityName" placeholder="Ej: Agencia de Regulación Sanitaria (ARSA)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="companyName">Nombre de su Empresa *</label>
+                    <input type="text" id="companyName" placeholder="Nombre completo de su organización">
+                </div>
+                
+                <div class="form-group">
+                    <label for="offerAmount">Monto de la Oferta (L.) *</label>
+                    <input type="text" id="offerAmount" placeholder="Ej: 47,377.75">
+                </div>
+                
+                <div class="form-group">
+                    <label for="validityPeriod">Vigencia de la Oferta (días) *</label>
+                    <input type="number" id="validityPeriod" value="90" min="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="offerDetails">Detalles de la Oferta</label>
+                    <textarea id="offerDetails" placeholder="Describa los productos/servicios que está ofertando..."></textarea>
+                </div>
+                
+                <div class="card-header" style="margin-top: 30px;">
+                    <i class="fas fa-file-upload"></i>
+                    <h2 class="card-title">Documento de Licitación</h2>
+                </div>
+                
+                <div class="file-upload" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Subir Documento de Licitación</h3>
+                    <p>Haga clic o arrastre aquí el archivo (PDF, DOC, DOCX)</p>
+                    <p class="file-name" id="fileName">No se ha seleccionado ningún archivo</p>
+                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx" style="display: none;">
+                </div>
+                
+                <button class="btn btn-block" onclick="generateDocument()">
+                    <i class="fas fa-cogs"></i> Generar Documento de Oferta
+                </button>
+            </div>
+            
+            <div class="document-preview" id="documentPreview">
+                <div class="document-header">
+                    <h2>Vista Previa del Documento</h2>
+                    <p>Complete el formulario para generar su documento de oferta</p>
+                </div>
+                
+                <div class="document-content" id="previewContent">
+                    <p class="document-section">Los detalles de su oferta aparecerán aquí después de completar el formulario y hacer clic en "Generar Documento de Oferta".</p>
+                </div>
+            </div>
+        </main>
+        
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-redo"></i> Reiniciar Formulario
+            </button>
+            <button class="btn" onclick="downloadDocument()">
+                <i class="fas fa-download"></i> Descargar Documento
+            </button>
+            <button class="btn" onclick="printDocument()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 Generador de Documentos de Oferta de Licitación | Todos los derechos reservados</p>
+            <p>Esta herramienta está diseñada para facilitar la creación de documentos formales para procesos de licitación pública.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Manejar la carga de archivos
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                document.getElementById('fileName').textContent = fileName;
+                document.getElementById('fileUploadArea').style.borderColor = '#2ec27e';
+                document.getElementById('fileUploadArea').style.backgroundColor = 'rgba(46, 194, 126, 0.05)';
+            }
+        });
+        
+        // Permitir arrastrar y soltar archivos
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = '#1a5fb4';
+            fileUploadArea.style.backgroundColor = 'rgba(26, 95, 180, 0.05)';
+        });
+        
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.style.borderColor = '#e0e0e0';
+            fileUploadArea.style.backgroundColor = '';
+        });
+        
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = '#2ec27e';
+            fileUploadArea.style.backgroundColor = 'rgba(46, 194, 126, 0.05)';
+            
+            if (e.dataTransfer.files.length) {
+                document.getElementById('fileInput').files = e.dataTransfer.files;
+                document.getElementById('fileName').textContent = e.dataTransfer.files[0].name;
+            }
+        });
+        
+        // Generar el documento de oferta
+        function generateDocument() {
+            // Obtener valores de los campos
+            const tenderNumber = document.getElementById('tenderNumber').value;
+            const tenderName = document.getElementById('tenderName').value;
+            const entityName = document.getElementById('entityName').value;
+            const companyName = document.getElementById('companyName').value;
+            const offerAmount = document.getElementById('offerAmount').value;
+            const validityPeriod = document.getElementById('validityPeriod').value;
+            const offerDetails = document.getElementById('offerDetails').value;
+            const fileName = document.getElementById('fileName').textContent;
+            
+            // Validar campos requeridos
+            if (!tenderNumber || !tenderName || !entityName || !companyName || !offerAmount || !validityPeriod) {
+                document.getElementById('errorNotification').style.display = 'block';
+                document.getElementById('successNotification').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('errorNotification').style.display = 'none';
+            document.getElementById('successNotification').style.display = 'block';
+            
+            // Generar fecha actual
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Generar contenido del documento
+            let content = `
+                <div class="document-header">
+                    <h2>OFERTA DE LICITACIÓN</h2>
+                    <p>Documento generado el ${formattedDate}</p>
+                </div>
+                
+                <div class="document-section">
+                    <h3>Datos de la Licitación</h3>
+                    <div class="document-row">
+                        <div class="document-label">Número de Licitación:</div>
+                        <div>${tenderNumber}</div>
+                    </div>
+                    <div class="document-row">
+                        <div class="document-label">Nombre de la Licitación:</div>
+                        <div>${tenderName}</div>
+                    </div>
+                    <div class="document-row">
+                        <div class="document-label">Entidad Contratante:</div>
+                        <div>${entityName}</div>
+                    </div>
+                    <div class="document-row">
+                        <div class="document-label">Documento Base:</div>
+                        <div>${fileName}</div>
+                    </div>
+                </div>
+                
+                <div class="document-section">
+                    <h3>Datos del Oferente</h3>
+                    <div class="document-row">
+                        <div class="document-label">Empresa Oferente:</div>
+                        <div>${companyName}</div>
+                    </div>
+                    <div class="document-row">
+                        <div class="document-label">Fecha de Presentación:</div>
+                        <div>${formattedDate}</div>
+                    </div>
+                </div>
+                
+                <div class="document-section">
+                    <h3>Detalles de la Oferta</h3>
+                    <div class="document-row">
+                        <div class="document-label">Monto Ofertado:</div>
+                        <div><strong>L. ${offerAmount}</strong></div>
+                    </div>
+                    <div class="document-row">
+                        <div class="document-label">Vigencia de la Oferta:</div>
+                        <div>${validityPeriod} días</div>
+                    </div>
+                    <div class="document-row">
+                        <div class="document-label" style="align-self: flex-start;">Descripción de la Oferta:</div>
+                        <div>${offerDetails || 'No se proporcionaron detalles adicionales.'}</div>
+                    </div>
+                </div>
+                
+                <div class="document-section">
+                    <h3>Declaraciones</h3>
+                    <p>Por medio de la presente, ${companyName} declara que:</p>
+                    <ol style="margin-left: 20px; margin-top: 15px;">
+                        <li>Ha examinado el pliego de condiciones de la licitación ${tenderNumber} y no tiene observaciones al mismo.</li>
+                        <li>La oferta presentada cumple con todas las especificaciones técnicas y requisitos establecidos en el documento de licitación.</li>
+                        <li>Se compromete a mantener la oferta válida por un período de ${validityPeriod} días naturales a partir de la fecha de presentación.</li>
+                        <li>Presenta la documentación requerida según lo establecido en el pliego de condiciones.</li>
+                        <li>Acepta las condiciones de pago y plazos de entrega establecidos en el documento de licitación.</li>
+                    </ol>
+                </div>
+                
+                <div class="document-section" style="margin-top: 50px;">
+                    <div style="text-align: center;">
+                        <p>_________________________</p>
+                        <p>Firma del Representante Legal</p>
+                        <p>${companyName}</p>
+                        <p>${formattedDate}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = content;
+        }
+        
+        // Descargar documento como PDF
+        function downloadDocument() {
+            const previewContent = document.getElementById('previewContent').innerHTML;
+            
+            if (!previewContent || previewContent.includes('Complete el formulario')) {
+                document.getElementById('errorNotification').textContent = "Primero genere el documento antes de descargar";
+                document.getElementById('errorNotification').style.display = 'block';
+                document.getElementById('successNotification').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('errorNotification').style.display = 'none';
+            document.getElementById('successNotification').style.display = 'block';
+            
+            // En una implementación real, aquí se usaría una librería como jsPDF
+            // Para este ejemplo, simulamos la descarga
+            alert('Documento descargado con éxito. En una implementación real, esto generaría un archivo PDF.');
+        }
+        
+        // Imprimir documento
+        function printDocument() {
+            const previewContent = document.getElementById('previewContent').innerHTML;
+            
+            if (!previewContent || previewContent.includes('Complete el formulario')) {
+                document.getElementById('errorNotification').textContent = "Primero genere el documento antes de imprimir";
+                document.getElementById('errorNotification').style.display = 'block';
+                document.getElementById('successNotification').style.display = 'none';
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Oferta de Licitación</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 30px; }
+                        h2, h3 { color: #1a5fb4; }
+                        .document-row { display: flex; margin-bottom: 10px; }
+                        .document-label { font-weight: bold; width: 200px; }
+                        .document-section { margin-bottom: 30px; }
+                        .document-header { text-align: center; margin-bottom: 30px; }
+                        @media print {
+                            body { padding: 15mm; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${previewContent}
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 1000);
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+        
+        // Reiniciar el formulario
+        function resetForm() {
+            document.getElementById('tenderNumber').value = '';
+            document.getElementById('tenderName').value = '';
+            document.getElementById('entityName').value = '';
+            document.getElementById('companyName').value = '';
+            document.getElementById('offerAmount').value = '';
+            document.getElementById('validityPeriod').value = '90';
+            document.getElementById('offerDetails').value = '';
+            document.getElementById('fileName').textContent = 'No se ha seleccionado ningún archivo';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileUploadArea').style.borderColor = '#e0e0e0';
+            document.getElementById('fileUploadArea').style.backgroundColor = '';
+            
+            document.getElementById('previewContent').innerHTML = `
+                <p class="document-section">Los detalles de su oferta aparecerán aquí después de completar el formulario y hacer clic en "Generar Documento de Oferta".</p>
+            `;
+            
+            document.getElementById('errorNotification').style.display = 'none';
+            document.getElementById('successNotification').style.display = 'none';
+        }
+        
+        // Inicializar con datos de ejemplo
+        window.onload = function() {
+            // Datos de ejemplo para facilitar pruebas
+            document.getElementById('tenderNumber').value = 'LPN-05-ARSA-2025';
+            document.getElementById('tenderName').value = 'Adquisición de Licencias de Software';
+            document.getElementById('entityName').value = 'Agencia de Regulación Sanitaria (ARSA)';
+            document.getElementById('companyName').value = 'Soluciones Tecnológicas Honduras S.A.';
+            document.getElementById('offerAmount').value = '47,377.75';
+            document.getElementById('offerDetails').value = 'Ofrecemos las licencias solicitadas con un 5% de descuento sobre el precio de mercado, incluyendo soporte técnico 24/7 y capacitación para los usuarios finales.';
+        };
+    </script>
+</body>
+</html>
